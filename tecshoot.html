@@ -1,0 +1,2414 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tecshoot — Nền tảng nhiếp ảnh chuyên nghiệp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --bg2: #111111;
+    --bg3: #1a1a1a;
+    --accent: #c8a96e;
+    --accent2: #e8c98e;
+    --text: #f0ece4;
+    --muted: #7a7068;
+    --border: #2a2520;
+    --danger: #e06060;
+    --success: #5a9a7a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* ===== SCROLLBAR ===== */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
+
+  /* ===== NOISE TEXTURE ===== */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  /* ===== NAV ===== */
+  nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+    padding: 20px 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid transparent;
+    transition: all 0.4s;
+    backdrop-filter: blur(0px);
+  }
+
+  nav.scrolled {
+    background: rgba(10,10,10,0.92);
+    border-color: var(--border);
+    backdrop-filter: blur(20px);
+    padding: 16px 60px;
+  }
+
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 900;
+    letter-spacing: -1px;
+    color: var(--text);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--accent); }
+
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+    align-items: center;
+  }
+
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+
+  .nav-cta {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .btn-ghost {
+    padding: 8px 20px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    background: none;
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+  .btn-primary {
+    padding: 9px 22px;
+    background: var(--accent);
+    border: none;
+    border-radius: 2px;
+    color: #0a0a0a;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+  .btn-primary:hover { background: var(--accent2); }
+
+  /* ===== HERO ===== */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 60px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 80% at 70% 50%, rgba(200,169,110,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 60% at 20% 80%, rgba(200,169,110,0.05) 0%, transparent 50%);
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 80px 80px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black 0%, transparent 100%);
+    opacity: 0.4;
+  }
+
+  .hero-images {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 55%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: 6px;
+    padding: 80px 0 0 0;
+    opacity: 0.85;
+  }
+
+  .hero-img-card {
+    background: var(--bg3);
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+    animation: fadeInUp 0.8s ease both;
+  }
+
+  .hero-img-card:nth-child(1) { animation-delay: 0.1s; grid-row: span 2; }
+  .hero-img-card:nth-child(2) { animation-delay: 0.2s; }
+  .hero-img-card:nth-child(3) { animation-delay: 0.3s; }
+  .hero-img-card:nth-child(4) { animation-delay: 0.4s; }
+  .hero-img-card:nth-child(5) { animation-delay: 0.5s; grid-column: span 2; }
+
+  .photo-placeholder {
+    width: 100%;
+    height: 100%;
+    min-height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* gradient placeholders */
+  .hero-img-card:nth-child(1) .photo-placeholder { background: linear-gradient(135deg, #1e1a16 0%, #2a2218 40%, #1a1510 100%); }
+  .hero-img-card:nth-child(2) .photo-placeholder { background: linear-gradient(135deg, #161a1e 0%, #1a2228 100%); }
+  .hero-img-card:nth-child(3) .photo-placeholder { background: linear-gradient(135deg, #1e1a1a 0%, #2a1e1e 100%); }
+  .hero-img-card:nth-child(4) .photo-placeholder { background: linear-gradient(135deg, #161e18 0%, #1a2820 100%); }
+  .hero-img-card:nth-child(5) .photo-placeholder { background: linear-gradient(135deg, #1a1618 0%, #261e22 100%); }
+
+  /* SVG photo icons */
+  .photo-icon { font-size: 28px; opacity: 0.3; }
+
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-family: 'DM Mono', monospace;
+    margin-bottom: 28px;
+    animation: fadeInUp 0.6s ease both;
+  }
+
+  .hero-tag::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(52px, 6vw, 96px);
+    font-weight: 900;
+    line-height: 0.95;
+    letter-spacing: -3px;
+    max-width: 680px;
+    animation: fadeInUp 0.7s ease 0.1s both;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero-subtitle {
+    margin-top: 28px;
+    font-size: 15px;
+    color: var(--muted);
+    max-width: 420px;
+    line-height: 1.7;
+    animation: fadeInUp 0.7s ease 0.2s both;
+  }
+
+  .hero-actions {
+    margin-top: 40px;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    animation: fadeInUp 0.7s ease 0.3s both;
+  }
+
+  .btn-large {
+    padding: 14px 32px;
+    background: var(--accent);
+    border: none;
+    border-radius: 2px;
+    color: #0a0a0a;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.25s;
+    letter-spacing: 0.3px;
+  }
+  .btn-large:hover { background: var(--accent2); transform: translateY(-1px); }
+
+  .btn-outline-large {
+    padding: 13px 32px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    background: none;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+  .btn-outline-large:hover { border-color: var(--accent); color: var(--accent); }
+
+  .hero-stats {
+    margin-top: 60px;
+    display: flex;
+    gap: 48px;
+    animation: fadeInUp 0.7s ease 0.4s both;
+  }
+
+  .stat-item { }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .stat-label { font-size: 12px; color: var(--muted); letter-spacing: 0.5px; margin-top: 2px; }
+
+  /* ===== SEARCH BAR ===== */
+  #search {
+    padding: 0 60px;
+    position: relative;
+    z-index: 10;
+    margin-top: -1px;
+  }
+
+  .search-container {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 32px 40px;
+    display: flex;
+    gap: 20px;
+    align-items: flex-end;
+  }
+
+  .search-field {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .search-field label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+  }
+
+  .search-field select,
+  .search-field input {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 10px 14px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+  .search-field select:focus,
+  .search-field input:focus { border-color: var(--accent); }
+  .search-field select option { background: var(--bg2); }
+
+  .search-btn {
+    padding: 11px 32px;
+    background: var(--accent);
+    border: none;
+    border-radius: 2px;
+    color: #0a0a0a;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s;
+  }
+  .search-btn:hover { background: var(--accent2); }
+
+  /* ===== SECTION HEADER ===== */
+  .section-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 48px;
+  }
+
+  .section-eyebrow {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--accent);
+    font-family: 'DM Mono', monospace;
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: 700;
+    letter-spacing: -1.5px;
+    line-height: 1.05;
+  }
+
+  .section-title em { font-style: italic; color: var(--accent); }
+
+  .view-all {
+    font-size: 12px;
+    color: var(--muted);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 2px;
+    transition: color 0.2s, border-color 0.2s;
+    white-space: nowrap;
+  }
+  .view-all:hover { color: var(--accent); border-color: var(--accent); }
+
+  /* ===== PHOTOGRAPHERS SECTION ===== */
+  #photographers {
+    padding: 100px 60px;
+  }
+
+  .photographers-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+
+  .photographer-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+  }
+
+  .photographer-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+  }
+
+  .photographer-card.featured {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+
+  .card-photo {
+    height: 240px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .featured .card-photo { height: 360px; }
+
+  .card-photo-bg {
+    position: absolute;
+    inset: 0;
+    transition: transform 0.4s;
+  }
+
+  .photographer-card:hover .card-photo-bg { transform: scale(1.04); }
+
+  /* unique gradients per card */
+  .card-photo-bg.g1 { background: linear-gradient(160deg, #1a1612 0%, #2e2416 40%, #1a1208 100%); }
+  .card-photo-bg.g2 { background: linear-gradient(160deg, #12161a 0%, #162228 100%); }
+  .card-photo-bg.g3 { background: linear-gradient(160deg, #1a1214 0%, #2a1820 100%); }
+  .card-photo-bg.g4 { background: linear-gradient(160deg, #12181a 0%, #182820 100%); }
+  .card-photo-bg.g5 { background: linear-gradient(160deg, #1a1618 0%, #241420 100%); }
+
+  .card-photo-icon {
+    position: relative;
+    z-index: 1;
+    font-size: 36px;
+    opacity: 0.2;
+  }
+
+  .card-badge {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    padding: 4px 10px;
+    background: var(--accent);
+    color: #0a0a0a;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    border-radius: 2px;
+    font-family: 'DM Mono', monospace;
+    z-index: 2;
+  }
+
+  .card-badge.badge-new { background: var(--success); color: white; }
+
+  .card-info {
+    padding: 20px;
+  }
+
+  .card-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 4px;
+  }
+
+  .featured .card-name { font-size: 26px; }
+
+  .card-specialty {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 14px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .card-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .card-price {
+    font-size: 13px;
+    color: var(--accent);
+  }
+
+  .card-price strong {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  .card-rating {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .stars { color: var(--accent); letter-spacing: -1px; }
+
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+
+  .tag {
+    padding: 3px 8px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    font-size: 10px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.5px;
+  }
+
+  /* ===== BOOKING FLOW ===== */
+  #booking-flow {
+    padding: 100px 60px;
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .flow-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    margin-top: 60px;
+  }
+
+  .flow-step {
+    position: relative;
+    padding: 36px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: var(--bg);
+    transition: border-color 0.3s;
+  }
+
+  .flow-step:hover { border-color: var(--accent); }
+
+  .flow-step::after {
+    content: '→';
+    position: absolute;
+    right: -24px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--accent);
+    font-size: 18px;
+    z-index: 1;
+  }
+
+  .flow-step:last-child::after { display: none; }
+
+  .step-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 64px;
+    font-weight: 900;
+    color: var(--border);
+    line-height: 1;
+    margin-bottom: 20px;
+  }
+
+  .step-icon {
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--accent);
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    margin-bottom: 16px;
+    color: var(--accent);
+  }
+
+  .step-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 10px;
+  }
+
+  .step-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* ===== GALLERY / STATUS TRACKER ===== */
+  #tracker {
+    padding: 100px 60px;
+  }
+
+  .tracker-demo {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 40px;
+    margin-top: 48px;
+  }
+
+  .tracker-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 36px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .booking-ref {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .booking-ref strong {
+    color: var(--accent);
+    font-size: 16px;
+    display: block;
+    margin-top: 2px;
+  }
+
+  .status-bar {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    position: relative;
+    margin-bottom: 8px;
+  }
+
+  .status-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    position: relative;
+  }
+
+  .status-dot {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    position: relative;
+    z-index: 1;
+    transition: all 0.3s;
+  }
+
+  .status-step.done .status-dot {
+    background: var(--success);
+    border-color: var(--success);
+    color: white;
+  }
+
+  .status-step.active .status-dot {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #0a0a0a;
+    box-shadow: 0 0 0 4px rgba(200,169,110,0.2);
+  }
+
+  .status-step.pending .status-dot {
+    border-color: var(--border);
+    color: var(--muted);
+  }
+
+  .status-line {
+    position: absolute;
+    top: 16px;
+    left: calc(50% + 16px);
+    right: calc(-50% + 16px);
+    height: 2px;
+    background: var(--border);
+    z-index: 0;
+  }
+
+  .status-step.done .status-line { background: var(--success); }
+  .status-step.active .status-line { background: var(--border); }
+
+  .status-label {
+    margin-top: 10px;
+    font-size: 10px;
+    color: var(--muted);
+    text-align: center;
+    letter-spacing: 0.5px;
+    font-family: 'DM Mono', monospace;
+    white-space: nowrap;
+  }
+
+  .status-step.active .status-label { color: var(--accent); }
+  .status-step.done .status-label { color: var(--success); }
+
+  .gallery-preview {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+    margin-top: 32px;
+  }
+
+  .gallery-thumb {
+    aspect-ratio: 1;
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+  }
+
+  .gallery-thumb:hover { border-color: var(--accent); }
+  .gallery-thumb.selected { border-color: var(--accent); }
+
+  .gallery-thumb-bg {
+    width: 100%;
+    height: 100%;
+    background: var(--bg3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    opacity: 0.3;
+    transition: opacity 0.2s;
+  }
+
+  .gallery-thumb:hover .gallery-thumb-bg { opacity: 0.5; }
+
+  .gallery-thumb .heart-btn {
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    background: rgba(10,10,10,0.8);
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 11px;
+    opacity: 0;
+    transition: opacity 0.2s;
+    color: var(--muted);
+  }
+
+  .gallery-thumb:hover .heart-btn { opacity: 1; }
+  .gallery-thumb.selected .heart-btn { opacity: 1; color: #e06060; }
+
+  .watermark-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    color: rgba(255,255,255,0.15);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transform: rotate(-25deg);
+    pointer-events: none;
+  }
+
+  /* ===== PIN COMMENT ===== */
+  .pin-comment-demo {
+    margin-top: 24px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 24px;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+
+  .pin-thumb {
+    width: 80px;
+    height: 80px;
+    background: var(--bg3);
+    border-radius: 3px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    opacity: 0.3;
+  }
+
+  .pin-form { flex: 1; }
+
+  .pin-form h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    margin-bottom: 12px;
+  }
+
+  .pin-form h4 span { color: var(--accent); font-style: italic; }
+
+  .request-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .request-chip {
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    font-size: 11px;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .request-chip:hover,
+  .request-chip.active {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(200,169,110,0.06);
+  }
+
+  .pin-warning {
+    font-size: 11px;
+    color: var(--muted);
+    border-left: 2px solid var(--accent);
+    padding-left: 10px;
+    line-height: 1.6;
+  }
+
+  /* ===== STORAGE ===== */
+  .storage-bar-wrap {
+    margin-top: 12px;
+  }
+
+  .storage-bar-track {
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .storage-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 2px;
+    transition: width 1s ease;
+  }
+
+  .storage-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    margin-top: 6px;
+  }
+
+  /* ===== PHOTOGRAPHER DASHBOARD PREVIEW ===== */
+  #dashboard {
+    padding: 100px 60px;
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .dashboard-layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 24px;
+    margin-top: 48px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    min-height: 500px;
+  }
+
+  .dash-sidebar {
+    border-right: 1px solid var(--border);
+    padding: 28px 0;
+    background: var(--bg2);
+  }
+
+  .dash-logo {
+    padding: 0 24px 28px;
+    border-bottom: 1px solid var(--border);
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 900;
+  }
+
+  .dash-logo span { color: var(--accent); }
+
+  .dash-nav { padding: 20px 0; }
+
+  .dash-nav-item {
+    padding: 10px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    border-left: 2px solid transparent;
+  }
+
+  .dash-nav-item:hover,
+  .dash-nav-item.active {
+    color: var(--text);
+    border-left-color: var(--accent);
+    background: rgba(200,169,110,0.04);
+  }
+
+  .dash-nav-item.active { color: var(--accent); }
+
+  .dash-nav-icon { font-size: 16px; width: 20px; text-align: center; }
+
+  .dash-main { padding: 32px; }
+
+  .dash-greeting {
+    margin-bottom: 28px;
+  }
+
+  .dash-greeting p {
+    font-size: 12px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    margin-bottom: 4px;
+  }
+
+  .dash-greeting h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -1px;
+  }
+
+  .dash-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  .dash-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 20px;
+  }
+
+  .dash-card-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    margin-bottom: 8px;
+  }
+
+  .dash-card-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .dash-card-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+  .dash-jobs-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .dash-jobs-table th {
+    text-align: left;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    padding: 0 0 12px;
+    border-bottom: 1px solid var(--border);
+    font-family: 'DM Mono', monospace;
+    font-weight: 400;
+  }
+
+  .dash-jobs-table td {
+    padding: 12px 0;
+    font-size: 13px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+
+  .dash-jobs-table tr:last-child td { border-bottom: none; }
+
+  .job-status-badge {
+    display: inline-flex;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .job-status-badge.upcoming { background: rgba(90,154,122,0.15); color: var(--success); }
+  .job-status-badge.processing { background: rgba(200,169,110,0.12); color: var(--accent); }
+  .job-status-badge.done { background: rgba(122,112,104,0.15); color: var(--muted); }
+
+  /* ===== CONTEST ===== */
+  #contest {
+    padding: 100px 60px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .contest-bg {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 50% 60% at 80% 50%, rgba(200,169,110,0.06) 0%, transparent 60%);
+  }
+
+  .contest-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 60px;
+    align-items: center;
+    position: relative;
+  }
+
+  .contest-entries {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .contest-entry {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .contest-entry:hover { border-color: var(--accent); }
+  .contest-entry:first-child { grid-column: span 2; }
+
+  .contest-entry-photo {
+    aspect-ratio: 16/9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    opacity: 0.2;
+    position: relative;
+  }
+
+  .contest-entry:nth-child(1) .contest-entry-photo { background: linear-gradient(135deg, #1e1812 0%, #2e2416 100%); }
+  .contest-entry:nth-child(2) .contest-entry-photo { background: linear-gradient(135deg, #12181e 0%, #162430 100%); aspect-ratio: 1; }
+  .contest-entry:nth-child(3) .contest-entry-photo { background: linear-gradient(135deg, #1a1218 0%, #281824 100%); aspect-ratio: 1; }
+
+  .contest-entry-info {
+    padding: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .contest-entry-name { font-size: 12px; font-family: 'DM Mono', monospace; color: var(--muted); }
+
+  .vote-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    color: var(--muted);
+    cursor: pointer;
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 3px 10px;
+    transition: all 0.2s;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .vote-btn:hover,
+  .vote-btn.voted {
+    border-color: var(--danger);
+    color: var(--danger);
+  }
+
+  .crown-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 18px;
+    filter: drop-shadow(0 0 8px rgba(200,169,110,0.5));
+  }
+
+  /* ===== ABOUT / FEATURES ===== */
+  #about {
+    padding: 100px 60px;
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    margin-top: 48px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .feature-item {
+    padding: 40px 36px;
+    background: var(--bg);
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    transition: background 0.3s;
+  }
+
+  .feature-item:hover { background: var(--bg3); }
+  .feature-item:nth-child(3n) { border-right: none; }
+  .feature-item:nth-child(n+4) { border-bottom: none; }
+
+  .feature-icon {
+    font-size: 28px;
+    margin-bottom: 16px;
+  }
+
+  .feature-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 10px;
+  }
+
+  .feature-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* ===== FAQ ===== */
+  #faq {
+    padding: 100px 60px;
+  }
+
+  .faq-list { max-width: 760px; margin-top: 48px; }
+
+  .faq-item {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .faq-q {
+    padding: 20px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    font-size: 15px;
+    transition: color 0.2s;
+  }
+
+  .faq-q:hover { color: var(--accent); }
+
+  .faq-toggle {
+    color: var(--accent);
+    font-size: 20px;
+    transition: transform 0.3s;
+    flex-shrink: 0;
+    width: 24px;
+    text-align: center;
+  }
+
+  .faq-item.open .faq-toggle { transform: rotate(45deg); }
+
+  .faq-a {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+
+  .faq-item.open .faq-a { max-height: 200px; }
+
+  .faq-a p {
+    padding-bottom: 20px;
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  /* ===== FOOTER ===== */
+  footer {
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    padding: 60px 60px 40px;
+  }
+
+  .footer-top {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 60px;
+    padding-bottom: 48px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .footer-brand .nav-logo { font-size: 22px; display: block; margin-bottom: 14px; }
+
+  .footer-brand p {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 20px;
+  }
+
+  .social-links { display: flex; gap: 10px; }
+
+  .social-link {
+    width: 34px;
+    height: 34px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    font-size: 14px;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+  .social-link:hover { border-color: var(--accent); color: var(--accent); }
+
+  .footer-col h4 {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    margin-bottom: 16px;
+  }
+
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+
+  .footer-col a {
+    font-size: 13px;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-col a:hover { color: var(--text); }
+
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 28px;
+    font-size: 12px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+  }
+
+  .app-links { display: flex; gap: 10px; }
+
+  .app-btn {
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    font-size: 11px;
+    color: var(--muted);
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+  .app-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ===== MODAL OVERLAY ===== */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    backdrop-filter: blur(10px);
+  }
+
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+  .modal-box {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 40px;
+    max-width: 520px;
+    width: 90%;
+    transform: translateY(20px);
+    transition: transform 0.3s;
+  }
+
+  .modal-overlay.open .modal-box { transform: translateY(0); }
+
+  .modal-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .modal-sub { font-size: 13px; color: var(--muted); margin-bottom: 24px; line-height: 1.6; }
+
+  .modal-actions { display: flex; gap: 12px; margin-top: 24px; justify-content: flex-end; }
+
+  /* ===== SCROLL REVEAL ===== */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ===== TABS ===== */
+  .tabs {
+    display: flex;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+    display: inline-flex;
+    margin-bottom: 40px;
+  }
+
+  .tab-btn {
+    padding: 10px 24px;
+    border: none;
+    background: var(--bg2);
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-right: 1px solid var(--border);
+  }
+
+  .tab-btn:last-child { border-right: none; }
+  .tab-btn.active { background: var(--accent); color: #0a0a0a; font-weight: 500; }
+
+  /* ===== PRICING ===== */
+  #pricing {
+    padding: 100px 60px;
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+  }
+
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 48px;
+  }
+
+  .pricing-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 36px;
+    position: relative;
+    transition: border-color 0.3s;
+  }
+
+  .pricing-card:hover { border-color: var(--accent); }
+
+  .pricing-card.featured-plan {
+    border-color: var(--accent);
+    background: var(--bg3);
+  }
+
+  .plan-name {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  .plan-price {
+    font-family: 'Playfair Display', serif;
+    font-size: 48px;
+    font-weight: 900;
+    color: var(--text);
+    letter-spacing: -2px;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .plan-price sup {
+    font-size: 20px;
+    font-weight: 400;
+    vertical-align: super;
+    color: var(--muted);
+  }
+
+  .plan-duration { font-size: 12px; color: var(--muted); margin-bottom: 28px; }
+
+  .plan-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    margin-bottom: 28px;
+  }
+
+  .plan-features li {
+    font-size: 13px;
+    color: var(--muted);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .plan-features li::before {
+    content: '✓';
+    color: var(--success);
+    flex-shrink: 0;
+    font-size: 12px;
+    margin-top: 1px;
+  }
+
+  .popular-badge {
+    position: absolute;
+    top: -1px;
+    right: 24px;
+    background: var(--accent);
+    color: #0a0a0a;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    padding: 4px 12px;
+    font-family: 'DM Mono', monospace;
+    text-transform: uppercase;
+    border-radius: 0 0 4px 4px;
+  }
+
+  /* ===== RESPONSIVE (basic) ===== */
+  @media (max-width: 1024px) {
+    nav, #hero, #search, #photographers, #booking-flow, #tracker, #dashboard, #contest, #about, #faq, #pricing, footer { padding-left: 30px; padding-right: 30px; }
+    .photographers-grid { grid-template-columns: repeat(2, 1fr); }
+    .photographer-card.featured { grid-column: span 2; }
+    .footer-top { grid-template-columns: 1fr 1fr; gap: 40px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <a href="#" class="nav-logo">Tec<span>shoot</span></a>
+  <ul class="nav-links">
+    <li><a href="#photographers">Nhiếp ảnh gia</a></li>
+    <li><a href="#booking-flow">Đặt lịch</a></li>
+    <li><a href="#contest">Cuộc thi</a></li>
+    <li><a href="#about">Về chúng tôi</a></li>
+    <li><a href="#faq">FAQ</a></li>
+  </ul>
+  <div class="nav-cta">
+    <button class="btn-ghost" onclick="openModal('loginModal')">Đăng nhập</button>
+    <a href="#" class="btn-primary">Đăng ký</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+
+  <div class="hero-images">
+    <div class="hero-img-card">
+      <div class="photo-placeholder" style="background: linear-gradient(160deg,#201a12 0%,#3a2c18 40%,#201410 100%)">
+        <span class="photo-icon">📸</span>
+      </div>
+    </div>
+    <div class="hero-img-card">
+      <div class="photo-placeholder" style="background: linear-gradient(160deg,#12161e 0%,#182430 100%)">
+        <span class="photo-icon">🌿</span>
+      </div>
+    </div>
+    <div class="hero-img-card">
+      <div class="photo-placeholder" style="background: linear-gradient(160deg,#1e1214 0%,#2c1820 100%)">
+        <span class="photo-icon">💫</span>
+      </div>
+    </div>
+    <div class="hero-img-card">
+      <div class="photo-placeholder" style="background: linear-gradient(160deg,#121e18 0%,#1a2e22 100%)">
+        <span class="photo-icon">🎞️</span>
+      </div>
+    </div>
+    <div class="hero-img-card">
+      <div class="photo-placeholder" style="background: linear-gradient(160deg,#1a141e 0%,#281e2e 100%)">
+        <span class="photo-icon">✨</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-tag">Nền tảng nhiếp ảnh chuyên nghiệp</div>
+
+  <h1 class="hero-title">
+    Khoảnh khắc<br><em>đáng nhớ</em><br>xứng tầm.
+  </h1>
+
+  <p class="hero-subtitle">
+    Kết nối với nhiếp ảnh gia tài năng, tùy chỉnh từng buổi chụp, nhận ảnh hoàn hảo — tất cả trên một nền tảng duy nhất.
+  </p>
+
+  <div class="hero-actions">
+    <button class="btn-large" onclick="document.getElementById('photographers').scrollIntoView({behavior:'smooth'})">Tìm nhiếp ảnh gia</button>
+    <button class="btn-outline-large" onclick="openModal('dashModal')">Dành cho thợ chụp →</button>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat-item">
+      <div class="stat-num">340+</div>
+      <div class="stat-label">Nhiếp ảnh gia</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">12k</div>
+      <div class="stat-label">Buổi chụp thành công</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">4.9★</div>
+      <div class="stat-label">Đánh giá trung bình</div>
+    </div>
+  </div>
+</section>
+
+<!-- SEARCH BAR -->
+<section id="search">
+  <div class="search-container">
+    <div class="search-field">
+      <label>Khu vực</label>
+      <select>
+        <option>Hà Nội</option>
+        <option>TP. Hồ Chí Minh</option>
+        <option>Đà Nẵng</option>
+        <option>Huế</option>
+        <option>Hội An</option>
+      </select>
+    </div>
+    <div class="search-field">
+      <label>Loại hình</label>
+      <select>
+        <option>Tất cả</option>
+        <option>Cá nhân / Portrait</option>
+        <option>Gia đình</option>
+        <option>Sự kiện</option>
+        <option>Sản phẩm</option>
+        <option>Cưới hỏi</option>
+      </select>
+    </div>
+    <div class="search-field">
+      <label>Phong cách</label>
+      <select>
+        <option>Tất cả</option>
+        <option>Film / Analog</option>
+        <option>Editorial</option>
+        <option>Lifestyle</option>
+        <option>Fine Art</option>
+        <option>Documentary</option>
+      </select>
+    </div>
+    <div class="search-field">
+      <label>Mức giá (VNĐ)</label>
+      <select>
+        <option>Tất cả</option>
+        <option>Dưới 1 triệu</option>
+        <option>1 – 3 triệu</option>
+        <option>3 – 5 triệu</option>
+        <option>Trên 5 triệu</option>
+      </select>
+    </div>
+    <button class="search-btn">🔍 Tìm kiếm</button>
+  </div>
+</section>
+
+<!-- PHOTOGRAPHERS -->
+<section id="photographers">
+  <div class="section-header reveal">
+    <div>
+      <div class="section-eyebrow">Khám phá</div>
+      <h2 class="section-title">Nhiếp ảnh gia<br><em>nổi bật</em></h2>
+    </div>
+    <a href="#" class="view-all">Xem tất cả →</a>
+  </div>
+
+  <div class="photographers-grid reveal">
+    <!-- Featured card -->
+    <div class="photographer-card featured" onclick="openModal('bookingModal')">
+      <div class="card-photo">
+        <div class="card-photo-bg g1"></div>
+        <span class="card-photo-icon">📸</span>
+        <div class="card-badge">⭐ Top Pick</div>
+      </div>
+      <div class="card-info">
+        <div class="card-name">Nguyễn Minh Khoa</div>
+        <div class="card-specialty">EDITORIAL · FINE ART · PORTRAIT</div>
+        <div class="card-meta">
+          <div class="card-price">từ <strong>2.800.000</strong> đ</div>
+          <div class="card-rating"><span class="stars">★★★★★</span> 4.98 (127)</div>
+        </div>
+        <div class="card-tags">
+          <span class="tag">Hà Nội</span>
+          <span class="tag">Film Look</span>
+          <span class="tag">Concept</span>
+          <span class="tag">Cưới</span>
+        </div>
+        <div class="storage-bar-wrap" style="margin-top:14px">
+          <div style="font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;margin-bottom:6px">Lịch tháng này: 3 slot còn trống</div>
+          <div class="storage-bar-track">
+            <div class="storage-bar-fill" style="width:75%"></div>
+          </div>
+          <div class="storage-meta"><span>Đã đặt 9/12</span><span>75%</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="photographer-card" onclick="openModal('bookingModal')">
+      <div class="card-photo">
+        <div class="card-photo-bg g2"></div>
+        <span class="card-photo-icon">🌿</span>
+        <div class="card-badge badge-new">Mới</div>
+      </div>
+      <div class="card-info">
+        <div class="card-name">Trần Anh Tú</div>
+        <div class="card-specialty">LIFESTYLE · OUTDOOR</div>
+        <div class="card-meta">
+          <div class="card-price">từ <strong>1.500.000</strong> đ</div>
+          <div class="card-rating"><span class="stars">★★★★★</span> 4.95</div>
+        </div>
+        <div class="card-tags">
+          <span class="tag">TP.HCM</span>
+          <span class="tag">Natural Light</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="photographer-card" onclick="openModal('bookingModal')">
+      <div class="card-photo">
+        <div class="card-photo-bg g3"></div>
+        <span class="card-photo-icon">💫</span>
+      </div>
+      <div class="card-info">
+        <div class="card-name">Lê Thu Hà</div>
+        <div class="card-specialty">FAMILY · MATERNITY</div>
+        <div class="card-meta">
+          <div class="card-price">từ <strong>2.200.000</strong> đ</div>
+          <div class="card-rating"><span class="stars">★★★★★</span> 4.92</div>
+        </div>
+        <div class="card-tags">
+          <span class="tag">Hà Nội</span>
+          <span class="tag">Studio</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="photographer-card" onclick="openModal('bookingModal')">
+      <div class="card-photo">
+        <div class="card-photo-bg g4"></div>
+        <span class="card-photo-icon">🎞️</span>
+      </div>
+      <div class="card-info">
+        <div class="card-name">Phạm Đức Hùng</div>
+        <div class="card-specialty">PRODUCT · COMMERCIAL</div>
+        <div class="card-meta">
+          <div class="card-price">từ <strong>3.500.000</strong> đ</div>
+          <div class="card-rating"><span class="stars">★★★★★</span> 4.88</div>
+        </div>
+        <div class="card-tags">
+          <span class="tag">Đà Nẵng</span>
+          <span class="tag">E-commerce</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="photographer-card" onclick="openModal('bookingModal')">
+      <div class="card-photo">
+        <div class="card-photo-bg g5"></div>
+        <span class="card-photo-icon">✨</span>
+      </div>
+      <div class="card-info">
+        <div class="card-name">Hoàng Bích Ngọc</div>
+        <div class="card-specialty">WEDDING · DOCUMENTARY</div>
+        <div class="card-meta">
+          <div class="card-price">từ <strong>4.000.000</strong> đ</div>
+          <div class="card-rating"><span class="stars">★★★★★</span> 5.0</div>
+        </div>
+        <div class="card-tags">
+          <span class="tag">Hội An</span>
+          <span class="tag">Cinematic</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BOOKING FLOW -->
+<section id="booking-flow">
+  <div class="section-header reveal">
+    <div>
+      <div class="section-eyebrow">Quy trình</div>
+      <h2 class="section-title">Đặt lịch<br><em>dễ dàng</em></h2>
+    </div>
+  </div>
+
+  <div class="flow-steps reveal">
+    <div class="flow-step">
+      <div class="step-num">01</div>
+      <div class="step-icon">🔍</div>
+      <div class="step-title">Khám phá & Chọn thợ</div>
+      <div class="step-desc">Lọc theo khu vực, phong cách, mức giá. Xem portfolio, đánh giá thực từ khách hàng và lịch trống theo thời gian thực.</div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">02</div>
+      <div class="step-icon">⚙️</div>
+      <div class="step-title">Cấu hình & Thanh toán</div>
+      <div class="step-desc">Chọn gói chụp, thêm Add-ons (Makeup, Studio, In ấn...). Thanh toán cọc 50% hoặc toàn bộ qua MoMo / thẻ ngân hàng.</div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">03</div>
+      <div class="step-icon">🖼️</div>
+      <div class="step-title">Nhận & Chọn ảnh</div>
+      <div class="step-desc">Theo dõi tiến độ thời gian thực. Nhận link Gallery, chọn ảnh yêu thích, ghim ghi chú retouch chi tiết và tải ảnh hoàn chỉnh.</div>
+    </div>
+  </div>
+</section>
+
+<!-- TRACKER & GALLERY -->
+<section id="tracker">
+  <div class="section-header reveal">
+    <div>
+      <div class="section-eyebrow">Quản lý Booking</div>
+      <h2 class="section-title">Theo dõi tiến độ<br><em>trực tiếp</em></h2>
+    </div>
+  </div>
+
+  <div class="tracker-demo reveal">
+    <div class="tracker-header">
+      <div class="booking-ref">
+        Mã đặt lịch
+        <strong>#TSH-20240825-0042</strong>
+      </div>
+      <div style="font-size:13px;color:var(--muted)">Nhiếp ảnh gia: <span style="color:var(--text)">Nguyễn Minh Khoa</span></div>
+    </div>
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <div class="status-step done">
+        <div class="status-dot">✓</div>
+        <div class="status-line"></div>
+        <div class="status-label">Chờ chụp</div>
+      </div>
+      <div class="status-step done">
+        <div class="status-dot">✓</div>
+        <div class="status-line"></div>
+        <div class="status-label">Đã chụp</div>
+      </div>
+      <div class="status-step done">
+        <div class="status-dot">✓</div>
+        <div class="status-line"></div>
+        <div class="status-label">Đang xử lý</div>
+      </div>
+      <div class="status-step active">
+        <div class="status-dot">📌</div>
+        <div class="status-line"></div>
+        <div class="status-label">Chọn ảnh</div>
+      </div>
+      <div class="status-step pending">
+        <div class="status-dot">—</div>
+        <div class="status-line"></div>
+        <div class="status-label">Đang Retouch</div>
+      </div>
+      <div class="status-step pending">
+        <div class="status-dot">—</div>
+        <div class="status-label">Hoàn tất</div>
+      </div>
+    </div>
+
+    <!-- Gallery preview -->
+    <div style="margin-top:28px;font-size:12px;color:var(--muted);font-family:'DM Mono',monospace;margin-bottom:12px">
+      Gallery ảnh gốc — Chọn ảnh yêu thích (12/48 ảnh theo gói)
+    </div>
+    <div class="gallery-preview" id="galleryGrid"></div>
+
+    <!-- Pin comment demo -->
+    <div class="pin-comment-demo" style="margin-top:24px">
+      <div class="pin-thumb">📷</div>
+      <div class="pin-form">
+        <h4>📌 Ghi chú retouch cho ảnh <span>#TSH-007</span></h4>
+        <div class="request-chips">
+          <div class="request-chip active">Bóp dáng</div>
+          <div class="request-chip">Xóa rác nền</div>
+          <div class="request-chip">Chỉnh sáng</div>
+          <div class="request-chip">Làm mịn da</div>
+          <div class="request-chip">Tăng màu preset</div>
+          <div class="request-chip">Xóa bóng mặt</div>
+        </div>
+        <div class="pin-warning">
+          ⚠️ Vui lòng chọn yêu cầu cụ thể từ danh sách trên. Hệ thống không chấp nhận ghi chú chung chung như <em>"chỉnh đẹp lên"</em> để đảm bảo chất lượng retouch đúng mong đợi.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PHOTOGRAPHER DASHBOARD -->
+<section id="dashboard">
+  <div class="section-header reveal">
+    <div>
+      <div class="section-eyebrow">Dành cho Nhiếp ảnh gia</div>
+      <h2 class="section-title">Dashboard<br><em>chuyên nghiệp</em></h2>
+    </div>
+  </div>
+
+  <div class="dashboard-layout reveal">
+    <div class="dash-sidebar">
+      <div class="dash-logo">Tec<span>shoot</span></div>
+      <div class="dash-nav">
+        <div class="dash-nav-item active"><span class="dash-nav-icon">📊</span> Dashboard</div>
+        <div class="dash-nav-item"><span class="dash-nav-icon">📅</span> Lịch làm việc</div>
+        <div class="dash-nav-item"><span class="dash-nav-icon">💼</span> Công việc</div>
+        <div class="dash-nav-item"><span class="dash-nav-icon">☁️</span> Upload Center</div>
+        <div class="dash-nav-item"><span class="dash-nav-icon">💬</span> Tin nhắn</div>
+        <div class="dash-nav-item"><span class="dash-nav-icon">📈</span> Doanh thu</div>
+        <div class="dash-nav-item"><span class="dash-nav-icon">⚙️</span> Hồ sơ</div>
+      </div>
+      <!-- Storage bar in sidebar -->
+      <div style="padding:20px 24px;border-top:1px solid var(--border);margin-top:auto">
+        <div style="font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;margin-bottom:8px">DUNG LƯỢNG</div>
+        <div class="storage-bar-track">
+          <div class="storage-bar-fill" style="width:42%"></div>
+        </div>
+        <div class="storage-meta"><span>2.1 GB / 5 GB</span><span>42%</span></div>
+      </div>
+    </div>
+
+    <div class="dash-main">
+      <div class="dash-greeting">
+        <p>Chào buổi sáng,</p>
+        <h2>Nguyễn Minh Khoa ✦</h2>
+      </div>
+
+      <div class="dash-cards">
+        <div class="dash-card">
+          <div class="dash-card-label">Doanh thu tháng này</div>
+          <div class="dash-card-value">14.2M</div>
+          <div class="dash-card-sub">+18% so với tháng trước</div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-label">Công việc đang xử lý</div>
+          <div class="dash-card-value">3</div>
+          <div class="dash-card-sub">1 chờ upload ảnh</div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-label">Đánh giá trung bình</div>
+          <div class="dash-card-value">4.98</div>
+          <div class="dash-card-sub">127 lượt đánh giá</div>
+        </div>
+      </div>
+
+      <table class="dash-jobs-table">
+        <thead>
+          <tr>
+            <th>Khách hàng</th>
+            <th>Loại hình</th>
+            <th>Ngày</th>
+            <th>Trạng thái</th>
+            <th>Giá trị</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Linh Nguyễn</td>
+            <td style="color:var(--muted);font-size:12px">Portrait / Cá nhân</td>
+            <td style="font-family:'DM Mono',monospace;font-size:12px;color:var(--muted)">28/08</td>
+            <td><span class="job-status-badge upcoming">Sắp diễn ra</span></td>
+            <td style="color:var(--accent)">2.800.000đ</td>
+          </tr>
+          <tr>
+            <td>Gia đình Phúc</td>
+            <td style="color:var(--muted);font-size:12px">Gia đình</td>
+            <td style="font-family:'DM Mono',monospace;font-size:12px;color:var(--muted)">25/08</td>
+            <td><span class="job-status-badge processing">Đang retouch</span></td>
+            <td style="color:var(--accent)">4.200.000đ</td>
+          </tr>
+          <tr>
+            <td>Minh Trang</td>
+            <td style="color:var(--muted);font-size:12px">Pre-wedding</td>
+            <td style="font-family:'DM Mono',monospace;font-size:12px;color:var(--muted)">20/08</td>
+            <td><span class="job-status-badge done">Hoàn tất</span></td>
+            <td style="color:var(--accent)">7.500.000đ</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- CONTEST -->
+<section id="contest">
+  <div class="contest-bg"></div>
+  <div class="contest-grid">
+    <div>
+      <div class="section-eyebrow">Photo of the Month</div>
+      <h2 class="section-title">Cuộc thi<br><em>ảnh nghệ thuật</em></h2>
+      <p style="font-size:14px;color:var(--muted);line-height:1.8;margin-top:20px;max-width:340px">
+        Mỗi tháng, cộng đồng Tecshoot bình chọn tác phẩm xuất sắc nhất. Nhiếp ảnh gia đạt <strong style="color:var(--accent)">Top Photographer</strong> nhận huy hiệu và tăng đề xuất trên trang chủ. Khách hàng tham gia vote nhận Voucher giảm giá.
+      </p>
+      <div style="margin-top:32px;display:flex;gap:16px;flex-wrap:wrap">
+        <button class="btn-large">Nộp tác phẩm</button>
+        <button class="btn-outline-large" onclick="openModal('contestModal')">Xem tất cả →</button>
+      </div>
+      <div style="margin-top:36px;display:flex;gap:32px">
+        <div><div class="stat-num" style="font-size:24px">89</div><div class="stat-label">Tác phẩm tháng này</div></div>
+        <div><div class="stat-num" style="font-size:24px">2.1k</div><div class="stat-label">Lượt vote</div></div>
+        <div><div class="stat-num" style="font-size:24px">5</div><div class="stat-label">Ngày còn lại</div></div>
+      </div>
+    </div>
+
+    <div class="contest-entries">
+      <div class="contest-entry">
+        <div class="contest-entry-photo">
+          <div class="crown-badge">👑</div>
+          📸
+        </div>
+        <div class="contest-entry-info">
+          <span class="contest-entry-name">by Nguyễn Minh Khoa</span>
+          <button class="vote-btn voted">♥ 342</button>
+        </div>
+      </div>
+      <div class="contest-entry">
+        <div class="contest-entry-photo" style="min-height:120px">🌿</div>
+        <div class="contest-entry-info">
+          <span class="contest-entry-name">by Trần Anh Tú</span>
+          <button class="vote-btn">♥ 218</button>
+        </div>
+      </div>
+      <div class="contest-entry">
+        <div class="contest-entry-photo" style="min-height:120px">💫</div>
+        <div class="contest-entry-info">
+          <span class="contest-entry-name">by Lê Thu Hà</span>
+          <button class="vote-btn">♥ 195</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES / ABOUT -->
+<section id="about">
+  <div class="section-header reveal">
+    <div>
+      <div class="section-eyebrow">Nền tảng</div>
+      <h2 class="section-title">Tại sao chọn<br><em>Tecshoot?</em></h2>
+    </div>
+  </div>
+
+  <div class="features-grid reveal">
+    <div class="feature-item">
+      <div class="feature-icon">🔒</div>
+      <div class="feature-title">Watermark Tự động</div>
+      <div class="feature-desc">Toàn bộ ảnh gốc được đóng dấu bản quyền Tecshoot ngay khi upload. Chỉ bản retouch hoàn chỉnh mới giao tới khách hàng.</div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">⚡</div>
+      <div class="feature-title">Upload Chunking</div>
+      <div class="feature-desc">Công nghệ tải lên theo khối đảm bảo thợ upload hàng trăm ảnh RAW không lo treo trình duyệt. Background upload trong khi làm việc khác.</div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">📌</div>
+      <div class="feature-title">Pin Comment Retouch</div>
+      <div class="feature-desc">Khách click thẳng vào ảnh để ghim ghi chú cụ thể. Hệ thống yêu cầu chọn từ danh sách có sẵn, loại bỏ yêu cầu mơ hồ.</div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">💾</div>
+      <div class="feature-title">Quản lý Dung lượng</div>
+      <div class="feature-desc">Thanh progress bar hiển thị dung lượng đã dùng. File gốc tự xóa sau 30 ngày hoàn tất để tiết kiệm tài nguyên server.</div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">💳</div>
+      <div class="feature-title">Thanh toán minh bạch</div>
+      <div class="feature-desc">Tổng tiền tách bạch: phí thợ chụp và phí dịch vụ nền tảng. Hỗ trợ MoMo, thẻ ngân hàng, đặt cọc 50% hoặc thanh toán 100%.</div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">🎯</div>
+      <div class="feature-title">Gợi ý Cá nhân hóa</div>
+      <div class="feature-desc">Hệ thống đề xuất thợ dựa trên lịch sử xem và đặt lịch. Concept trending, Moodboard cá nhân cho từng khách hàng.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="section-header reveal">
+    <div>
+      <div class="section-eyebrow">Gói dịch vụ</div>
+      <h2 class="section-title">Chọn gói<br><em>phù hợp</em></h2>
+    </div>
+  </div>
+
+  <div class="pricing-grid reveal">
+    <div class="pricing-card">
+      <div class="plan-name">Cơ bản</div>
+      <div class="plan-price"><sup>đ</sup>500k</div>
+      <div class="plan-duration">/ buổi • 1 giờ chụp</div>
+      <ul class="plan-features">
+        <li>20 ảnh gốc có watermark</li>
+        <li>Chọn 5 ảnh retouch cơ bản</li>
+        <li>Giao ảnh trong 5 ngày</li>
+        <li>Chat trực tiếp với thợ</li>
+      </ul>
+      <button class="btn-primary" style="width:100%;padding:12px;border-radius:2px;font-size:14px">Chọn gói này</button>
+    </div>
+    <div class="pricing-card featured-plan">
+      <div class="popular-badge">Phổ biến nhất</div>
+      <div class="plan-name">Tiêu chuẩn</div>
+      <div class="plan-price"><sup>đ</sup>1.5M</div>
+      <div class="plan-duration">/ buổi • 2–3 giờ chụp</div>
+      <ul class="plan-features">
+        <li>50 ảnh gốc có watermark</li>
+        <li>Chọn 15 ảnh retouch nâng cao</li>
+        <li>Giao ảnh trong 3 ngày</li>
+        <li>Pin comment retouch chi tiết</li>
+        <li>Add-ons: Makeup / Studio</li>
+      </ul>
+      <button class="btn-large" style="width:100%;padding:13px;border-radius:2px;font-size:14px" onclick="openModal('bookingModal')">Đặt lịch ngay</button>
+    </div>
+    <div class="pricing-card">
+      <div class="plan-name">Cao cấp</div>
+      <div class="plan-price"><sup>đ</sup>4M</div>
+      <div class="plan-duration">/ buổi • Trọn ngày</div>
+      <ul class="plan-features">
+        <li>Không giới hạn ảnh gốc</li>
+        <li>Chọn 40 ảnh retouch Fine Art</li>
+        <li>Giao ảnh trong 24 giờ</li>
+        <li>Concept + Moodboard cùng thợ</li>
+        <li>In ảnh, Album thiết kế riêng</li>
+        <li>Ưu tiên slot lịch thợ Top</li>
+      </ul>
+      <button class="btn-primary" style="width:100%;padding:12px;border-radius:2px;font-size:14px">Chọn gói này</button>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="section-header reveal">
+    <div>
+      <div class="section-eyebrow">Hỏi đáp</div>
+      <h2 class="section-title">Câu hỏi<br><em>thường gặp</em></h2>
+    </div>
+  </div>
+
+  <div class="faq-list reveal">
+    <div class="faq-item open">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        Tôi có thể hủy đặt lịch không? Chính sách hoàn tiền như thế nào?
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a"><p>Bạn có thể hủy miễn phí trước 48 giờ so với buổi chụp và được hoàn 100% tiền đặt cọc. Hủy trong vòng 24–48 giờ được hoàn 50%. Hủy dưới 24 giờ sẽ không được hoàn tiền cọc để đảm bảo quyền lợi cho nhiếp ảnh gia.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        Ảnh watermark và ảnh hoàn chỉnh khác nhau như thế nào?
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a"><p>Ảnh watermark là ảnh gốc chưa retouch, có logo Tecshoot để bảo vệ bản quyền — dùng để bạn chọn ảnh ưng ý. Sau khi bạn chọn và nhiếp ảnh gia retouch xong, bạn sẽ nhận ảnh hoàn chỉnh chất lượng cao, không watermark.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        Tôi có thể chỉ định yêu cầu retouch cụ thể không?
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a"><p>Có! Hệ thống Pin Comment cho phép bạn click thẳng vào từng ảnh và chọn yêu cầu từ danh sách định sẵn (Bóp dáng, Xóa rác, Chỉnh sáng, Làm mịn da...). Điều này giúp thợ hiểu chính xác bạn muốn gì, tránh hiểu nhầm.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        Các Add-ons như Makeup, Studio có thể đặt qua Tecshoot không?
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a"><p>Có! Khi cấu hình booking, bạn sẽ thấy danh sách Add-ons đi kèm do Tecshoot cung cấp (Studio, Makeup Artist, In ấn, Album thiết kế...). Phí các dịch vụ này được hiển thị riêng biệt và rõ ràng trong hóa đơn.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        Nhiếp ảnh gia đăng ký tham gia Tecshoot như thế nào?
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a"><p>Bạn đăng ký tài khoản Nhiếp ảnh gia, điền thông tin và upload portfolio. Đội ngũ Tecshoot sẽ xét duyệt trong 2–3 ngày làm việc. Sau khi được duyệt, bạn có thể thiết lập hồ sơ, gói chụp, lịch làm việc và bắt đầu nhận job.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a href="#" class="nav-logo">Tec<span>shoot</span></a>
+      <p>Nền tảng kết nối nhiếp ảnh gia chuyên nghiệp với khách hàng. Mọi khoảnh khắc đáng được ghi lại một cách hoàn hảo nhất.</p>
+      <div class="social-links">
+        <div class="social-link">f</div>
+        <div class="social-link">in</div>
+        <div class="social-link">ig</div>
+        <div class="social-link">yt</div>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Dịch vụ</h4>
+      <ul>
+        <li><a href="#">Tìm nhiếp ảnh gia</a></li>
+        <li><a href="#">Gói chụp ảnh</a></li>
+        <li><a href="#">Dịch vụ Add-ons</a></li>
+        <li><a href="#">Cuộc thi ảnh</a></li>
+        <li><a href="#">Blog & Inspiration</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Đối tác</h4>
+      <ul>
+        <li><a href="#">Đăng ký làm thợ</a></li>
+        <li><a href="#">Dashboard thợ</a></li>
+        <li><a href="#">Chính sách thợ</a></li>
+        <li><a href="#">Hỗ trợ kỹ thuật</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Hỗ trợ</h4>
+      <ul>
+        <li><a href="#">Trung tâm FAQ</a></li>
+        <li><a href="#">Liên hệ</a></li>
+        <li><a href="#">Chính sách bảo mật</a></li>
+        <li><a href="#">Điều khoản sử dụng</a></li>
+        <li><a href="#">Chính sách hoàn tiền</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2024 Tecshoot. Bảo lưu mọi quyền.</span>
+    <div class="app-links">
+      <div class="app-btn">📱 App Store</div>
+      <div class="app-btn">🤖 Google Play</div>
+    </div>
+  </div>
+</footer>
+
+<!-- MODALS -->
+<!-- Booking Modal -->
+<div class="modal-overlay" id="bookingModal">
+  <div class="modal-box">
+    <div class="modal-title">Đặt lịch chụp</div>
+    <div class="modal-sub">Bạn đang chọn <strong style="color:var(--accent)">Nguyễn Minh Khoa</strong> — Editorial · Fine Art · Portrait</div>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div class="search-field">
+        <label>Gói chụp</label>
+        <select>
+          <option>Tiêu chuẩn — 1.500.000đ / 2-3 giờ</option>
+          <option>Cơ bản — 500.000đ / 1 giờ</option>
+          <option>Cao cấp — 4.000.000đ / Trọn ngày</option>
+        </select>
+      </div>
+      <div class="search-field">
+        <label>Ngày chụp</label>
+        <input type="date" value="2024-08-28">
+      </div>
+      <div class="search-field">
+        <label>Add-ons</label>
+        <select>
+          <option>Không có</option>
+          <option>Makeup Artist (+500.000đ)</option>
+          <option>Studio rental (+800.000đ)</option>
+          <option>In 20 ảnh 4x6 (+300.000đ)</option>
+        </select>
+      </div>
+      <div style="padding:14px;background:var(--bg3);border-radius:2px;font-size:13px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="color:var(--muted)">Phí thợ chụp</span><span>1.500.000đ</span></div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="color:var(--muted)">Phí nền tảng (8%)</span><span>120.000đ</span></div>
+        <div style="display:flex;justify-content:space-between;border-top:1px solid var(--border);padding-top:8px;margin-top:8px;font-weight:500"><span>Tổng cộng</span><span style="color:var(--accent)">1.620.000đ</span></div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-ghost" onclick="closeModal('bookingModal')">Huỷ</button>
+      <button class="btn-primary">Đặt cọc 50% →</button>
+    </div>
+  </div>
+</div>
+
+<!-- Login Modal -->
+<div class="modal-overlay" id="loginModal">
+  <div class="modal-box">
+    <div class="modal-title">Chào mừng trở lại</div>
+    <div class="modal-sub">Đăng nhập để quản lý booking và xem gallery ảnh của bạn.</div>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div class="search-field">
+        <label>Email</label>
+        <input type="email" placeholder="email@example.com">
+      </div>
+      <div class="search-field">
+        <label>Mật khẩu</label>
+        <input type="password" placeholder="••••••••">
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-ghost" onclick="closeModal('loginModal')">Huỷ</button>
+      <button class="btn-primary">Đăng nhập</button>
+    </div>
+    <div style="text-align:center;margin-top:16px;font-size:12px;color:var(--muted)">Chưa có tài khoản? <a href="#" style="color:var(--accent)">Đăng ký ngay</a></div>
+  </div>
+</div>
+
+<!-- Dashboard Promo Modal -->
+<div class="modal-overlay" id="dashModal">
+  <div class="modal-box">
+    <div class="modal-title">Tham gia Tecshoot với tư cách Nhiếp ảnh gia</div>
+    <div class="modal-sub">Tiếp cận hàng nghìn khách hàng, quản lý công việc chuyên nghiệp với Dashboard tích hợp CRM, Upload Center và theo dõi doanh thu.</div>
+    <div style="display:flex;flex-direction:column;gap:10px;margin:20px 0">
+      <div style="display:flex;gap:12px;align-items:center;font-size:13px;color:var(--muted)"><span style="color:var(--success)">✓</span> Dashboard quản lý job và thu nhập</div>
+      <div style="display:flex;gap:12px;align-items:center;font-size:13px;color:var(--muted)"><span style="color:var(--success)">✓</span> Upload Center với chunked upload</div>
+      <div style="display:flex;gap:12px;align-items:center;font-size:13px;color:var(--muted)"><span style="color:var(--success)">✓</span> Nhận yêu cầu retouch cụ thể từ khách</div>
+      <div style="display:flex;gap:12px;align-items:center;font-size:13px;color:var(--muted)"><span style="color:var(--success)">✓</span> Tham gia cuộc thi Photo of the Month</div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-ghost" onclick="closeModal('dashModal')">Đóng</button>
+      <button class="btn-primary">Đăng ký làm thợ →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Nav scroll
+const nav = document.getElementById('mainNav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// FAQ toggle
+function toggleFaq(el) {
+  const item = el.parentElement;
+  const wasOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+  if (!wasOpen) item.classList.add('open');
+}
+
+// Modal
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.querySelectorAll('.modal-overlay').forEach(m => {
+  m.addEventListener('click', e => {
+    if (e.target === m) { m.classList.remove('open'); document.body.style.overflow = ''; }
+  });
+});
+
+// Gallery grid
+const gallery = document.getElementById('galleryGrid');
+const emojis = ['🌸','🌿','🌅','💫','🎋','🌊','🌙','🏔️','🌺','🦋','🌼','🌙','🎑','🌸','🌿','🌅','💫','🎋'];
+const selected = new Set([2,5,8,11]);
+for (let i = 0; i < 18; i++) {
+  const thumb = document.createElement('div');
+  thumb.className = 'gallery-thumb' + (selected.has(i) ? ' selected' : '');
+  thumb.innerHTML = `
+    <div class="gallery-thumb-bg">${emojis[i % emojis.length]}</div>
+    <div class="watermark-overlay">TECSHOOT</div>
+    <button class="heart-btn">${selected.has(i) ? '♥' : '♡'}</button>
+  `;
+  thumb.addEventListener('click', function() {
+    this.classList.toggle('selected');
+    const hb = this.querySelector('.heart-btn');
+    hb.textContent = this.classList.contains('selected') ? '♥' : '♡';
+    if (this.classList.contains('selected')) hb.style.color = '#e06060';
+    else hb.style.color = '';
+  });
+  gallery.appendChild(thumb);
+}
+
+// Request chips interactive
+document.querySelectorAll('.request-chip').forEach(chip => {
+  chip.addEventListener('click', function() {
+    this.classList.toggle('active');
+  });
+});
+
+// Vote buttons
+document.querySelectorAll('.vote-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    this.classList.toggle('voted');
+  });
+});
+
+// Scroll reveal
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+reveals.forEach(r => observer.observe(r));
+
+// Animate storage bars on scroll
+const storageObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.storage-bar-fill').forEach(bar => {
+        const w = bar.style.width;
+        bar.style.width = '0';
+        setTimeout(() => { bar.style.width = w; }, 100);
+      });
+    }
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('.storage-bar-wrap, .dash-sidebar').forEach(el => storageObserver.observe(el));
+</script>
+</body>
+</html>
