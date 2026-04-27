@@ -14,6 +14,8 @@
 <nav id="mainNav">
   <a href="#" class="nav-logo">Tec<span>shoot</span></a>
   <ul class="nav-links">
+    <li><a href="#services">Dịch vụ bổ trợ</a></li> <li><a href="#photographers">Nhiếp ảnh gia</a></li>
+    <li><a href="#booking-flow">Đặt lịch</a></li>
     <li><a href="#photographers">Nhiếp ảnh gia</a></li>
     <li><a href="#booking-flow">Đặt lịch</a></li>
     <li><a href="#contest">Cuộc thi</a></li>
@@ -104,15 +106,16 @@
       </select>
     </div>
     <div class="search-field">
-      <label>Loại hình</label>
-      <select>
-        <option>Tất cả</option>
-        <option>Cá nhân / Portrait</option>
-        <option>Gia đình</option>
-        <option>Sự kiện</option>
-        <option>Sản phẩm</option>
-        <option>Cưới hỏi</option>
-      </select>
+      <label>Loại hình</label>
+      <select>
+        <option>Tất cả</option>
+        <option>Cá nhân</option>
+        <option>Cặp đôi</option>
+        <option>Gia đình</option>
+        <option>Nhóm</option>
+        <option>HSSV</option>
+        <option>Sự kiện</option>
+      </select>
     </div>
     <div class="search-field">
       <label>Phong cách</label>
@@ -259,6 +262,50 @@
   </div>
 </section>
 
+  <section id="services" style="padding: 100px 60px; background: var(--bg2);">
+  <div class="section-header reveal">
+    <div>
+      <div class="section-eyebrow">Dịch vụ từ Tecshoot</div>
+      <h2 class="section-title">Hỗ trợ trọn gói<br><em>cho buổi chụp</em></h2>
+      <p class="mt-20 max-w-340 text-muted-13">Chúng tôi cung cấp hệ sinh thái ekip chuyên nghiệp đi kèm, giúp bạn và nhiếp ảnh gia tạo ra tác phẩm hoàn hảo nhất.</p>
+    </div>
+  </div>
+
+  <div class="pricing-grid reveal">
+    <div class="pricing-card">
+      <div class="plan-name">Trang điểm & Làm tóc</div>
+      <div class="plan-price" style="font-size: 32px;"><sup>đ</sup>500k</div>
+      <div class="plan-duration">/ người</div>
+      <ul class="plan-features">
+        <li>Chuyên viên Makeup tận nơi</li>
+        <li>Bao gồm làm tóc cơ bản</li>
+        <li>Đổi layout makeup theo concept</li>
+      </ul>
+    </div>
+    <div class="pricing-card featured-plan">
+      <div class="popular-badge">Khuyên dùng</div>
+      <div class="plan-name">Thuê Studio / Concept</div>
+      <div class="plan-price" style="font-size: 32px;"><sup>đ</sup>800k</div>
+      <div class="plan-duration">/ buổi (3 giờ)</div>
+      <ul class="plan-features">
+        <li>Hỗ trợ Set up bối cảnh / Ngoài trời</li>
+        <li>Đầy đủ ánh sáng, hắt sáng</li>
+        <li>Điều hòa, phòng thay đồ</li>
+      </ul>
+    </div>
+    <div class="pricing-card">
+      <div class="plan-name">In ấn & Photobook</div>
+      <div class="plan-price" style="font-size: 32px;"><sup>đ</sup>300k</div>
+      <div class="plan-duration">/ gói</div>
+      <ul class="plan-features">
+        <li>In 20 ảnh chất lượng cao (13x18)</li>
+        <li>Tặng kèm album cao cấp</li>
+        <li>Giao hàng tận nhà</li>
+      </ul>
+    </div>
+  </div>
+</section>
+  
 <!-- BOOKING FLOW -->
 <section id="booking-flow">
   <div class="section-header reveal">
@@ -726,15 +773,31 @@
         <label>Ngày chụp</label>
         <input type="date" value="2024-08-28">
       </div>
-      <div class="search-field">
-        <label>Add-ons</label>
-        <select>
-          <option>Không có</option>
-          <option>Makeup Artist (+500.000đ)</option>
-          <option>Studio rental (+800.000đ)</option>
-          <option>In 20 ảnh 4x6 (+300.000đ)</option>
-        </select>
-      </div>
+     <div class="search-field">
+  <label style="margin-bottom: 8px; display: block;">Dịch vụ đi kèm của hệ thống</label>
+  <div class="flex-col gap-10">
+    <label class="flex-row align-center text-muted-13" style="cursor: pointer;">
+      <input type="checkbox" name="addon" style="width: auto; margin-right: 8px;"> 
+      Makeup & Làm tóc (+500.000đ)
+    </label>
+    <label class="flex-row align-center text-muted-13" style="cursor: pointer;">
+      <input type="checkbox" name="addon" style="width: auto; margin-right: 8px;"> 
+      Thuê Studio (+800.000đ)
+    </label>
+    <label class="flex-row align-center text-muted-13" style="cursor: pointer;">
+      <input type="checkbox" name="addon" style="width: auto; margin-right: 8px;"> 
+      Set up trang trí ngoài trời (+1.200.000đ)
+    </label>
+    <label class="flex-row align-center text-muted-13" style="cursor: pointer;">
+      <input type="checkbox" name="addon" style="width: auto; margin-right: 8px;"> 
+      In ảnh / Photobook (+300.000đ)
+    </label>
+    <label class="flex-row align-center text-muted-13" style="cursor: pointer;">
+      <input type="checkbox" name="addon" style="width: auto; margin-right: 8px;"> 
+      Thuê thợ phụ / Ekip (+1.000.000đ)
+    </label>
+  </div>
+</div>
       <div style="padding:14px;background:var(--bg3);border-radius:2px;font-size:13px">
         <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="color:var(--muted)">Phí thợ chụp</span><span>1.500.000đ</span></div>
         <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="color:var(--muted)">Phí nền tảng (8%)</span><span>120.000đ</span></div>
