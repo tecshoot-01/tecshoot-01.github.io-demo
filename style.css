@@ -1,15 +1,26 @@
-  :root {
-    --bg: #0a0a0a;
-    --bg2: #111111;
-    --bg3: #1a1a1a;
-    --accent: #c8a96e;
-    --accent2: #e8c98e;
-    --text: #f0ece4;
-    --muted: #7a7068;
-    --border: #2a2520;
-    --danger: #e06060;
-    --success: #5a9a7a;
-  }
+ :root {
+  /* Bảng màu mùa hè từ khách hàng */
+  --honey-quartz: #F7B720;
+  --chartreuse: #D8CF00;
+  --persimmon: #F35900;
+  --khaki: #6D7636;
+  --army: #42421E;
+
+  /* Gán vào biến giao diện */
+  --bg: #FFFDF5; /* Nền trắng kem ấm để tôn màu hè */
+  --bg2: #F4EEDC; /* Nền xám vàng nhạt cho các khối */
+  --bg3: #E8E0C8;
+  --text: var(--army); /* Chữ màu xanh rêu đậm thay vì màu đen */
+  --muted: var(--khaki); /* Chữ phụ/chữ mờ màu xanh rêu nhạt */
+  --accent: var(--persimmon); /* Màu nhấn chính (Nút bấm) là màu cam hồng */
+  --accent2: var(--honey-quartz); /* Màu nhấn phụ (Hover) là vàng mật ong */
+  --border: rgba(109, 118, 54, 0.2); /* Viền màu Khaki làm mờ */
+  --danger: #e06060;
+  --success: var(--khaki);
+}
+
+/* Lưu ý nhỏ: Sửa lại màu chữ của nút bấm để dễ đọc trên nền màu Cam (Persimmon) */
+.btn-primary { color: #FFFDF5; }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
