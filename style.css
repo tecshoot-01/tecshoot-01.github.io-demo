@@ -51,65 +51,73 @@
   }
 
   /* ===== NAV ===== */
-  nav {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 100;
-    padding: 20px 60px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid transparent;
-    transition: all 0.4s;
-    backdrop-filter: blur(0px);
-  }
-
- nav {
-  /* Thêm dòng này để thanh menu luôn có màu nền sáng ngay từ lúc chưa cuộn */
-  background: var(--bg); 
+nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+  padding: 20px 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid transparent;
+  transition: all 0.4s;
+  backdrop-filter: blur(0px);
+  /* Đổi màu nền thành vàng Honey Quartz */
+  background: var(--honey-quartz); 
 }
 
 nav.scrolled {
-  /* Giữ nguyên màu nền sáng khi cuộn, kèm hiệu ứng kính mờ nhẹ */
-  background: rgba(255, 253, 245, 0.95); 
+  /* Giữ nền vàng Honey Quartz có độ trong suốt nhẹ khi cuộn */
+  background: rgba(247, 183, 32, 0.95); 
   border-bottom: 1px solid var(--border);
   backdrop-filter: blur(10px);
   padding: 16px 60px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03); /* Thêm bóng đổ nhẹ để menu tách biệt khỏi nội dung */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
-  .nav-logo {
-    font-family: 'Playfair Display', serif;
-    font-size: 24px;
-    font-weight: 900;
-    letter-spacing: -1px;
-    color: var(--text);
-    text-decoration: none;
-  }
-  .nav-logo span { color: var(--accent); }
+.nav-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px;
+  font-weight: 900;
+  letter-spacing: -1px;
+  text-decoration: none;
+  /* Đổi màu chữ Logo thành cam Persimmon */
+  color: var(--persimmon); 
+}
 
-  .nav-links {
-    display: flex;
-    gap: 36px;
-    list-style: none;
-    align-items: center;
-  }
+/* Đổi màu chữ "shoot" trong logo cho có điểm nhấn (màu xanh rêu Army) */
+.nav-logo span { 
+  color: var(--army); 
+}
 
-  .nav-links a {
-    color: var(--muted);
-    text-decoration: none;
-    font-size: 13px;
-    letter-spacing: 0.5px;
-    transition: color 0.2s;
-  }
-  .nav-links a:hover { color: var(--text); }
+.nav-links {
+  display: flex;
+  gap: 36px;
+  list-style: none;
+  align-items: center;
+}
 
-  .nav-cta {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-  }
+.nav-links a {
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  transition: color 0.2s;
+  /* Đổi màu chữ Menu thành cam Persimmon */
+  color: var(--persimmon); 
+}
+
+/* Đổi màu chữ khi rê chuột vào để tương tác tốt hơn */
+.nav-links a:hover { 
+  color: var(--army); 
+}
+
+.nav-cta {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
 
   .btn-ghost {
     padding: 8px 20px;
