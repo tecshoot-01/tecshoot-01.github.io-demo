@@ -258,30 +258,29 @@ nav.scrolled {
     50% { opacity: 0.3; }
   }
 
-  .hero-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(52px, 6vw, 96px);
-    font-weight: 900;
-    line-height: 0.95;
-    letter-spacing: -3px;
-    max-width: 680px;
-    animation: fadeInUp 0.7s ease 0.1s both;
-  }
+ .hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(48px, 5.5vw, 84px); /* Thu nhỏ chữ lại một chút để không chiếm quá nhiều diện tích */
+  font-weight: 900;
+  line-height: 1.15; /* TĂNG KHOẢNG CÁCH DÒNG để các dấu tiếng Việt không chạm nhau */
+  letter-spacing: -1px; /* NỚI LỎNG KHOẢNG CÁCH CHỮ (giảm từ -3px xuống) */
+  max-width: 680px;
+  margin-bottom: 20px; /* Tạo thêm không gian với đoạn văn bản bên dưới */
+}
 
   .hero-title em {
     font-style: italic;
     color: var(--accent);
   }
 
-  .hero-subtitle {
-    margin-top: 28px;
-    font-size: 15px;
-    color: var(--muted);
-    max-width: 420px;
-    line-height: 1.7;
-    animation: fadeInUp 0.7s ease 0.2s both;
-  }
-
+ .hero-subtitle {
+  margin-top: 0px; 
+  font-size: 16px; /* Tăng size chữ lên một chút */
+  color: var(--army); /* Sử dụng màu xanh rêu Khaki để hợp với tổng thể mùa hè */
+  max-width: 480px;
+  line-height: 1.7;
+  animation: fadeInUp 0.7s ease 0.2s both;
+}
   .hero-actions {
     margin-top: 40px;
     display: flex;
