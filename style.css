@@ -1613,3 +1613,35 @@ nav.scrolled {
     image-rendering: crisp-edges;
     transition: transform 0.4s ease; /* Thêm dòng này để ảnh có hiệu ứng zoom nhẹ cho đẹp */
 }
+
+/* 1. CODE DÙNG CHUNG: Đảm bảo không có bức ảnh nào trên web bị tràn ra ngoài */
+img {
+    max-width: 100%; /* Ảnh không bao giờ được phép rộng hơn khung chứa nó */
+    display: block;  /* Xóa khoảng trắng thừa lắt nhắt dưới đáy ảnh */
+    height: auto;    /* Tự động tính toán chiều cao theo tỷ lệ gốc để ảnh không bị méo */
+}
+
+/* 2. CODE DÀNH RIÊNG: Cho ảnh phần Hero và ảnh Nhiếp ảnh gia */
+.photographer-img, .hero-photo {
+    width: 100%;
+    height: 100%;
+    
+    /* CHỐNG MÓP/BỂ: Ép ảnh lấp đầy khung nhưng vẫn giữ đúng tỷ lệ thực. Phần ảnh thừa sẽ tự động bị cắt đi thay vì bóp méo bức hình. */
+    object-fit: cover; 
+    
+    /* CHỐNG LỆCH: Luôn lấy tâm điểm của bức ảnh làm chuẩn khi cắt bớt rìa. */
+    object-position: center; 
+    
+    /* CHỐNG MỜ: Giúp ảnh hiển thị sắc nét hơn trên một số trình duyệt */
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    
+    transition: transform 0.4s ease; /* Tạo hiệu ứng phóng to mượt mà khi rê chuột */
+}
+
+/* 3. CÁI KHUNG BỌC ẢNH: Đảm bảo khung luôn giấu đi phần ảnh thừa bị cắt */
+.card-photo, .hero-img-card {
+    overflow: hidden; /* Cực kỳ quan trọng: Giấu đi tất cả những gì tràn ra ngoài khung */
+    position: relative;
+    background-color: var(--bg2); /* Hiện màu nền nhẹ nếu mạng chậm ảnh chưa kịp tải */
+}
