@@ -1645,3 +1645,26 @@ img {
     position: relative;
     background-color: var(--bg2); /* Hiện màu nền nhẹ nếu mạng chậm ảnh chưa kịp tải */
 }
+
+/* Khóa chặt cái khung bọc ở bên ngoài */
+.card-photo, .hero-img-card {
+    overflow: hidden; 
+    position: relative; /* Ép khung làm điểm tựa */
+    background-color: var(--bg2); 
+}
+
+/* Định hình ảnh ở bên trong */
+.photographer-img, .hero-photo {
+    /* 3 DÒNG NÀY LÀ VŨ KHÍ MỚI ĐỂ ÉP ẢNH NẰM IM TRONG KHUNG: */
+    position: absolute;
+    top: 0;
+    left: 0;
+    
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+    object-position: center; 
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    transition: transform 0.4s ease; 
+}
