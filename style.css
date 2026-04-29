@@ -1644,3 +1644,21 @@ img {
     object-position: center; 
     transition: transform 0.4s ease; 
 }
+
+/* CỨU HỘ KHẨN CẤP LỖI VỠ LƯỚI */
+.photo-placeholder {
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-photo {
+    /* Dùng absolute để ảnh lấp đầy bộ xương mà không làm vỡ lưới */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.4s ease;
+}
