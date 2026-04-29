@@ -19,6 +19,12 @@
   --success: var(--khaki);
 }
 
+img {
+    max-width: 100%; /* Không bao giờ rộng hơn khung chứa nó */
+    display: block;  /* Loại bỏ khoảng trắng thừa dưới chân ảnh */
+    height: auto;    /* Tự động tính chiều cao theo chiều rộng để không bị móp */
+}
+
 /* Lưu ý nhỏ: Sửa lại màu chữ của nút bấm để dễ đọc trên nền màu Cam (Persimmon) */
 .btn-primary { color: #FFFDF5; }
 
@@ -1596,3 +1602,14 @@ nav.scrolled {
 .grad-3 { background: linear-gradient(160deg,#1e1214 0%,#2c1820 100%); }
 .grad-4 { background: linear-gradient(160deg,#121e18 0%,#1a2e22 100%); }
 .grad-5 { background: linear-gradient(160deg,#1a141e 0%,#281e2e 100%); }
+
+/* ===== CODE XỬ LÝ ẢNH CHUẨN (CHỐNG MÉO, CHỐNG MỜ) ===== */
+.photographer-img, .hero-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+    object-position: center; 
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    transition: transform 0.4s ease; /* Thêm dòng này để ảnh có hiệu ứng zoom nhẹ cho đẹp */
+}
