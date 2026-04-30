@@ -105,8 +105,7 @@
         <option>Hà Nội</option>
         <option>TP. Hồ Chí Minh</option>
         <option>Đà Nẵng</option>
-        <option>Huế</option>
-        <option>Hội An</option>
+
       </select>
     </div>
     <div class="search-field">
@@ -156,114 +155,113 @@
     <a href="#" class="view-all">Xem tất cả →</a>
   </div>
 
-  <div class="photographers-grid reveal">
-    <!-- Featured card -->
-    <div class="photographer-card featured" onclick="openModal('bookingModal')">
-      <div class="card-photo">
-        <div class="card-photo-bg g1"></div>
-        <span class="card-photo-icon">📸</span>
-        <div class="card-badge">⭐ Top Pick</div>
-      </div>
-      <div class="card-info">
-        <div class="card-name">Nguyễn Minh Khoa</div>
-        <div class="card-specialty">EDITORIAL · FINE ART · PORTRAIT</div>
-        <div class="card-meta">
-          <div class="card-price">từ <strong>2.800.000</strong> đ</div>
-          <div class="card-rating"><span class="stars">★★★★★</span> 4.98 (127)</div>
-        </div>
-        <div class="card-tags">
-          <span class="tag">Hà Nội</span>
-          <span class="tag">Film Look</span>
-          <span class="tag">Concept</span>
-          <span class="tag">Cưới</span>
-        </div>
-        <div class="storage-bar-wrap" style="margin-top:14px">
-          <div style="font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;margin-bottom:6px">Lịch tháng này: 3 slot còn trống</div>
-          <div class="storage-bar-track">
-            <div class="storage-bar-fill" style="width:75%"></div>
-          </div>
-          <div class="storage-meta"><span>Đã đặt 9/12</span><span>75%</span></div>
-        </div>
-      </div>
+<div class="photographers-grid reveal">
+  <!-- Card 1: Nguyễn Minh Khoa -->
+  <div class="photographer-card featured" onclick="openModal('bookingModal')">
+    <div class="card-photo">
+      <img src="images/DN/Hieuthuhai/avatar_1.jpg" alt="Hiếu Thứ Hai" class="photographer-img">
+      <div class="card-badge">⭐ Top Pick</div>
     </div>
-
-    <div class="photographer-card" onclick="openModal('bookingModal')">
-      <div class="card-photo">
-        <div class="card-photo-bg g2"></div>
-        <span class="card-photo-icon">🌿</span>
-        <div class="card-badge badge-new">Mới</div>
+    <div class="card-info">
+      <div class="card-name">Hiếu Thứ Hai</div>
+      <div class="card-specialty">EDITORIAL · FINE ART · PORTRAIT</div>
+      <div class="card-meta">
+        <div class="card-price">từ <strong>2.800.000</strong> đ</div>
+        <div class="card-rating"><span class="stars">★★★★★</span> 4.98 (127)</div>
       </div>
-      <div class="card-info">
-        <div class="card-name">Trần Anh Tú</div>
-        <div class="card-specialty">LIFESTYLE · OUTDOOR</div>
-        <div class="card-meta">
-          <div class="card-price">từ <strong>1.500.000</strong> đ</div>
-          <div class="card-rating"><span class="stars">★★★★★</span> 4.95</div>
-        </div>
-        <div class="card-tags">
-          <span class="tag">TP.HCM</span>
-          <span class="tag">Natural Light</span>
-        </div>
+      <div class="card-tags">
+        <span class="tag">Hà Nội</span>
+        <span class="tag">Film Look</span>
+        <span class="tag">Concept</span>
+        <span class="tag">Cưới</span>
       </div>
-    </div>
-
-    <div class="photographer-card" onclick="openModal('bookingModal')">
-      <div class="card-photo">
-        <div class="card-photo-bg g3"></div>
-        <span class="card-photo-icon">💫</span>
-      </div>
-      <div class="card-info">
-        <div class="card-name">Lê Thu Hà</div>
-        <div class="card-specialty">FAMILY · MATERNITY</div>
-        <div class="card-meta">
-          <div class="card-price">từ <strong>2.200.000</strong> đ</div>
-          <div class="card-rating"><span class="stars">★★★★★</span> 4.92</div>
+      <div class="storage-bar-wrap" style="margin-top:14px">
+        <div style="font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;margin-bottom:6px">Lịch tháng này: 3 slot còn trống</div>
+        <div class="storage-bar-track">
+          <div class="storage-bar-fill" style="width:75%"></div>
         </div>
-        <div class="card-tags">
-          <span class="tag">Hà Nội</span>
-          <span class="tag">Studio</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="photographer-card" onclick="openModal('bookingModal')">
-      <div class="card-photo">
-        <div class="card-photo-bg g4"></div>
-        <span class="card-photo-icon">🎞️</span>
-      </div>
-      <div class="card-info">
-        <div class="card-name">Phạm Đức Hùng</div>
-        <div class="card-specialty">PRODUCT · COMMERCIAL</div>
-        <div class="card-meta">
-          <div class="card-price">từ <strong>3.500.000</strong> đ</div>
-          <div class="card-rating"><span class="stars">★★★★★</span> 4.88</div>
-        </div>
-        <div class="card-tags">
-          <span class="tag">Đà Nẵng</span>
-          <span class="tag">E-commerce</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="photographer-card" onclick="openModal('bookingModal')">
-      <div class="card-photo">
-        <div class="card-photo-bg g5"></div>
-        <span class="card-photo-icon">✨</span>
-      </div>
-      <div class="card-info">
-        <div class="card-name">Hoàng Bích Ngọc</div>
-        <div class="card-specialty">WEDDING · DOCUMENTARY</div>
-        <div class="card-meta">
-          <div class="card-price">từ <strong>4.000.000</strong> đ</div>
-          <div class="card-rating"><span class="stars">★★★★★</span> 5.0</div>
-        </div>
-        <div class="card-tags">
-          <span class="tag">Hội An</span>
-          <span class="tag">Cinematic</span>
-        </div>
+        <div class="storage-meta"><span>Đã đặt 9/12</span><span>75%</span></div>
       </div>
     </div>
   </div>
+
+  <!-- Card 2: Misthy -->
+  <div class="photographer-card" onclick="openModal('bookingModal')">
+    <div class="card-photo">
+      <img src="images/HN/Misthy/avatar_7.jpg" alt="Trần Anh Tú" class="photographer-img">
+      <div class="card-badge badge-new">Mới</div>
+    </div>
+    <div class="card-info">
+      <div class="card-name">Misthy</div>
+      <div class="card-specialty">LIFESTYLE · OUTDOOR</div>
+      <div class="card-meta">
+        <div class="card-price">từ <strong>1.500.000</strong> đ</div>
+        <div class="card-rating"><span class="stars">★★★★★</span> 4.95</div>
+      </div>
+      <div class="card-tags">
+        <span class="tag">TP.HCM</span>
+        <span class="tag">Natural Light</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 3: Tư Cute -->
+  <div class="photographer-card" onclick="openModal('bookingModal')">
+    <div class="card-photo">
+      <img src="images/HN/tu_ca_nhan/avatar_8.jpg" alt="Lê Thu Hà" class="photographer-img">
+    </div>
+    <div class="card-info">
+      <div class="card-name">Tư Cute</div>
+      <div class="card-specialty">FAMILY · MATERNITY</div>
+      <div class="card-meta">
+        <div class="card-price">từ <strong>2.200.000</strong> đ</div>
+        <div class="card-rating"><span class="stars">★★★★★</span> 4.92</div>
+      </div>
+      <div class="card-tags">
+        <span class="tag">Hà Nội</span>
+        <span class="tag">Studio</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 4: 35 MM -->
+  <div class="photographer-card" onclick="openModal('bookingModal')">
+    <div class="card-photo">
+      <img src="images/TPHCM/35_MM/avatar_3.jpg" alt="Phạm Đức Hùng" class="photographer-img">
+    </div>
+    <div class="card-info">
+      <div class="card-name">35 MM</div>
+      <div class="card-specialty">PRODUCT · COMMERCIAL</div>
+      <div class="card-meta">
+        <div class="card-price">từ <strong>3.500.000</strong> đ</div>
+        <div class="card-rating"><span class="stars">★★★★★</span> 4.88</div>
+      </div>
+      <div class="card-tags">
+        <span class="tag">Đà Nẵng</span>
+        <span class="tag">E-commerce</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 5: Anh Độ Mixi -->
+  <div class="photographer-card" onclick="openModal('bookingModal')">
+    <div class="card-photo">
+      <img src="images/TPHCM/do_mixi/avatar_5.jpg" alt="Anh Độ Mixi" class="photographer-img">
+    </div>
+    <div class="card-info">
+      <div class="card-name">Anh Độ Mixi</div>
+      <div class="card-specialty">WEDDING · DOCUMENTARY</div>
+      <div class="card-meta">
+        <div class="card-price">từ <strong>4.000.000</strong> đ</div>
+        <div class="card-rating"><span class="stars">★★★★★</span> 5.0</div>
+      </div>
+      <div class="card-tags">
+        <span class="tag">Hội An</span>
+        <span class="tag">Cinematic</span>
+      </div>
+    </div>
+  </div>
+</div>
 </section>
 
   <section id="services" style="padding: 100px 60px; background: var(--bg2);">
